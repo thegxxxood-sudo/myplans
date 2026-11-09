@@ -1,0 +1,19 @@
+{
+  "name": "MyPlans — Финансы и Цели",
+  "short_name": "MyPlans",
+  "description": "Персональный финансовый и оперативный план (Ноябрь 2026 – Апрель 2027)",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#07090e",
+  "theme_color": "#07090e",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

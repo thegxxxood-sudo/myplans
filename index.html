@@ -1,0 +1,3220 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark" />
+  <meta name="theme-color" content="#07090e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="MyPlans" />
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <title>MyPlans // Финансовый и оперативный план (Ноябрь 2026 – Апрель 2027)</title>
+  <style>
+    :root {
+      --bg-deep: #07090e;
+      --bg-surface: rgba(22, 27, 38, 0.58);
+      --bg-surface-elevated: rgba(32, 39, 54, 0.65);
+      --bg-surface-hover: rgba(42, 51, 70, 0.72);
+      --bg-input: rgba(12, 16, 23, 0.72);
+
+      --glass-border: rgba(255, 255, 255, 0.09);
+      --glass-border-highlight: rgba(255, 255, 255, 0.2);
+      --glass-shine: linear-gradient(135deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.03) 45%, rgba(255, 255, 255, 0) 100%);
+      --glass-shadow: 0 18px 42px -10px rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.14);
+
+      --text-primary: #F1F5F9;
+      --text-secondary: #94A3B8;
+      --text-muted: #64748B;
+
+      --accent: #8B5CF6;
+      --accent-light: #A78BFA;
+      --accent-glow: rgba(139, 92, 246, 0.35);
+      --accent-soft: rgba(139, 92, 246, 0.15);
+
+      --cyan: #38BDF8;
+      --cyan-soft: rgba(56, 189, 248, 0.15);
+
+      --green: #10B981;
+      --green-light: #34D399;
+      --green-soft: rgba(16, 185, 129, 0.15);
+
+      --amber: #F59E0B;
+      --amber-light: #FBBF24;
+      --amber-soft: rgba(245, 158, 11, 0.16);
+
+      --red: #EF4444;
+      --red-light: #F87171;
+      --red-soft: rgba(239, 68, 68, 0.15);
+
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-pill: 999px;
+
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, sans-serif;
+      --font-num: "SF Pro Rounded", "Inter", system-ui, -apple-system, sans-serif;
+      --spring: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      background-color: var(--bg-deep);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 15px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Liquid Background Blobs */
+    .ambient-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 15%, rgba(139, 92, 246, 0.18), transparent 42%),
+        radial-gradient(circle at 88% 12%, rgba(56, 189, 248, 0.13), transparent 40%),
+        radial-gradient(circle at 50% 85%, rgba(16, 185, 129, 0.10), transparent 48%),
+        #07090e;
+    }
+
+    .ambient-orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      opacity: 0.45;
+      animation: floatOrb 18s ease-in-out infinite alternate;
+    }
+
+    .ambient-orb.orb-1 {
+      width: 440px;
+      height: 440px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.4), transparent 70%);
+      top: -120px;
+      left: 8%;
+    }
+
+    .ambient-orb.orb-2 {
+      width: 380px;
+      height: 380px;
+      background: radial-gradient(circle, rgba(56, 189, 248, 0.32), transparent 70%);
+      top: 25%;
+      right: -80px;
+      animation-delay: -6s;
+    }
+
+    @keyframes floatOrb {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(30px, 25px) scale(1.08); }
+    }
+
+    .num {
+      font-family: var(--font-num);
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.01em;
+    }
+
+    .app-container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 24px 24px 64px;
+    }
+
+    @media (max-width: 680px) {
+      .app-container {
+        padding: 14px 14px 48px;
+      }
+    }
+
+    /* Liquid Glass Surface Mixin */
+    .glass-panel {
+      background: var(--bg-surface);
+      background-image: var(--glass-shine);
+      backdrop-filter: blur(22px) saturate(165%);
+      -webkit-backdrop-filter: blur(22px) saturate(165%);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--glass-shadow);
+    }
+
+    /* Top Header */
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 24px;
+      margin-bottom: 24px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-area {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .brand-title-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .brand-logo {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent) 0%, #3B82F6 100%);
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+      font-size: 17px;
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(139, 92, 246, 0.4), inset 0 1px 1px rgba(255,255,255,0.4);
+    }
+
+    .brand-title {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+    }
+
+    .context-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 2px;
+    }
+
+    .context-pill {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 4px 11px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .context-pill.highlight {
+      color: var(--green-light);
+      background: var(--green-soft);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .topbar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .save-pill {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background: rgba(15, 20, 28, 0.6);
+      border: 1px solid var(--glass-border);
+      padding: 7px 13px;
+      border-radius: var(--radius-pill);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
+    }
+
+    /* Buttons */
+    button, .btn {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-surface-elevated);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 8px 14px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 7px;
+      transition: all 0.2s var(--spring);
+      user-select: none;
+    }
+
+    button:hover, .btn:hover {
+      background: var(--bg-surface-hover);
+      border-color: var(--glass-border-highlight);
+      transform: translateY(-1px);
+    }
+
+    button:active, .btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid var(--accent-light);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent) 0%, #6D28D9 100%);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(139, 92, 246, 0.32), inset 0 1px 0 rgba(255,255,255,0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent) 100%);
+      box-shadow: 0 8px 22px rgba(139, 92, 246, 0.45), inset 0 1px 0 rgba(255,255,255,0.35);
+    }
+
+    .btn-ghost-danger {
+      color: var(--text-secondary);
+    }
+
+    .btn-ghost-danger:hover {
+      color: var(--red-light);
+      background: var(--red-soft);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .btn-sm {
+      padding: 5px 10px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    /* Section Headers */
+    .section-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 24px 0 12px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0;
+    }
+
+    .section-hint {
+      font-size: 13px;
+      color: var(--text-secondary);
+    }
+
+    /* KPI Funds Grid */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    @media (max-width: 1220px) {
+      .kpi-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 780px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .kpi-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .kpi-card {
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.25s var(--spring), border-color 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--glass-border-highlight);
+    }
+
+    .kpi-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    .kpi-card.in-progress::before {
+      background: linear-gradient(90deg, var(--accent), var(--cyan));
+    }
+
+    .kpi-card.completed::before {
+      background: linear-gradient(90deg, var(--green), var(--green-light));
+    }
+
+    .kpi-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .kpi-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .kpi-badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      color: var(--accent-light);
+      flex-shrink: 0;
+    }
+
+    .kpi-card.completed .kpi-badge {
+      background: var(--green-soft);
+      color: var(--green-light);
+    }
+
+    .kpi-amounts {
+      display: flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 6px;
+    }
+
+    .kpi-current {
+      font-size: 21px;
+      font-weight: 800;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 2px 6px;
+      margin-left: -6px;
+      border-radius: 8px;
+      border: 1px dashed transparent;
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .kpi-current:hover {
+      background: var(--accent-soft);
+      border-color: rgba(139, 92, 246, 0.4);
+      color: #fff;
+    }
+
+    .kpi-target {
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      padding: 1px 4px;
+      border-radius: 6px;
+      transition: color 0.15s ease, background 0.15s ease;
+    }
+
+    .kpi-target:hover {
+      color: var(--text-primary);
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .progress-bar-track {
+      width: 100%;
+      height: 8px;
+      background: rgba(10, 14, 20, 0.75);
+      border-radius: var(--radius-pill);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(90deg, var(--accent) 0%, var(--cyan) 100%);
+      transition: width 0.4s var(--spring);
+    }
+
+    .kpi-card.completed .progress-bar-fill {
+      background: linear-gradient(90deg, #059669 0%, var(--green-light) 100%);
+    }
+
+    .kpi-note {
+      font-size: 12px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+    }
+
+    .kpi-quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .chip-btn {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 7px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+
+    .chip-btn:hover {
+      color: var(--text-primary);
+      background: var(--accent-soft);
+      border-color: rgba(139, 92, 246, 0.4);
+    }
+
+    .tranche-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 4px;
+    }
+
+    .tranche-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 6px;
+      background: rgba(12, 16, 23, 0.65);
+      border: 1px solid var(--glass-border);
+      color: var(--text-secondary);
+    }
+
+    .tranche-badge.paid {
+      color: var(--green-light);
+      background: var(--green-soft);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    /* Liquid Glass Navigation Dock */
+    .nav-dock-wrapper {
+      position: sticky;
+      top: 14px;
+      z-index: 30;
+      margin: 22px 0;
+      display: flex;
+      justify-content: center;
+    }
+
+    .liquid-dock {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 6px;
+      background: rgba(18, 23, 33, 0.72);
+      backdrop-filter: blur(28px) saturate(190%);
+      -webkit-backdrop-filter: blur(28px) saturate(190%);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: var(--radius-pill);
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.55),
+        inset 0 1px 1px rgba(255, 255, 255, 0.22),
+        inset 0 -1px 1px rgba(0, 0, 0, 0.35);
+      max-width: 100%;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+
+    .liquid-dock::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Morphing Liquid Pill Indicator */
+    .liquid-pill-indicator {
+      position: absolute;
+      top: 6px;
+      bottom: 6px;
+      left: 0;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.52) 0%, rgba(56, 189, 248, 0.32) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.34);
+      box-shadow:
+        0 6px 22px rgba(139, 92, 246, 0.42),
+        inset 0 1px 2px rgba(255, 255, 255, 0.45),
+        inset 0 -2px 6px rgba(139, 92, 246, 0.25);
+      backdrop-filter: blur(12px);
+      transition:
+        transform 0.46s cubic-bezier(0.22, 1.12, 0.36, 1),
+        width 0.42s cubic-bezier(0.22, 1.08, 0.36, 1);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .liquid-dock.switching .liquid-pill-indicator {
+      filter: brightness(1.18);
+    }
+
+    .dock-tab {
+      position: relative;
+      z-index: 1;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      color: var(--text-secondary);
+      font-size: 13.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: color 0.25s ease, transform 0.2s ease;
+    }
+
+    .dock-tab:hover {
+      color: var(--text-primary);
+      transform: none;
+    }
+
+    .dock-tab.active {
+      color: #FFFFFF;
+      text-shadow: 0 1px 8px rgba(139, 92, 246, 0.5);
+    }
+
+    .dock-tab-badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 7px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text-secondary);
+    }
+
+    .dock-tab.active .dock-tab-badge {
+      background: rgba(255, 255, 255, 0.22);
+      color: #fff;
+    }
+
+    .dock-tab-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 8px var(--cyan);
+    }
+
+    /* Animated Stage Transition */
+    .stage-view {
+      animation: liquidStageIn 0.38s var(--spring) both;
+    }
+
+    @keyframes liquidStageIn {
+      0% {
+        opacity: 0;
+        transform: translateY(10px) scale(0.99);
+        filter: blur(6px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+      }
+    }
+
+    /* Overview Tab Layout */
+    .overview-metrics {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 920px) {
+      .overview-metrics {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 520px) {
+      .overview-metrics {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .metric-card {
+      padding: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+    }
+
+    .metric-value {
+      font-size: 23px;
+      font-weight: 800;
+      color: var(--text-primary);
+    }
+
+    .metric-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Cashflow Visual Chart */
+    .chart-card {
+      padding: 22px 24px;
+      margin-bottom: 22px;
+    }
+
+    .chart-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12.5px;
+      color: var(--text-secondary);
+    }
+
+    .legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .legend-swatch {
+      width: 11px;
+      height: 11px;
+      border-radius: 4px;
+    }
+
+    .chart-columns {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: 14px;
+      align-items: end;
+      padding-top: 10px;
+    }
+
+    @media (max-width: 820px) {
+      .chart-columns {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .chart-columns {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    .chart-col {
+      background: rgba(12, 16, 23, 0.5);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 14px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      transition: all 0.22s var(--spring);
+    }
+
+    .chart-col:hover {
+      background: rgba(32, 39, 54, 0.65);
+      border-color: var(--glass-border-highlight);
+      transform: translateY(-3px);
+    }
+
+    .chart-bars-wrap {
+      height: 120px;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .bar-pillar {
+      width: 24px;
+      border-radius: 6px 6px 3px 3px;
+      min-height: 6px;
+      transition: height 0.4s var(--spring);
+      position: relative;
+    }
+
+    .bar-pillar.income {
+      background: linear-gradient(180deg, var(--green-light) 0%, #059669 100%);
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+    }
+
+    .bar-pillar.expense {
+      background: linear-gradient(180deg, var(--red-light) 0%, #DC2626 100%);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.22);
+    }
+
+    .chart-col-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .chart-col-net {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+    }
+
+    .chart-col-net.pos {
+      color: var(--green-light);
+      background: var(--green-soft);
+    }
+
+    .chart-col-net.neg {
+      color: var(--amber-light);
+      background: var(--amber-soft);
+    }
+
+    /* Overview Month Cards Grid */
+    .overview-months-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    @media (max-width: 980px) {
+      .overview-months-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 620px) {
+      .overview-months-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .mini-month-card {
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.24s var(--spring);
+    }
+
+    .mini-month-card:hover {
+      transform: translateY(-3px);
+      border-color: var(--accent-light);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(139, 92, 246, 0.3);
+    }
+
+    /* Focused Single Month Workspace */
+    .month-workspace-header {
+      padding: 22px 26px;
+      margin-bottom: 18px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .mw-title-area {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .mw-eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--accent-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .mw-title {
+      font-size: 26px;
+      font-weight: 800;
+      margin: 0;
+      letter-spacing: -0.02em;
+    }
+
+    .mw-subtitle {
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+
+    .mw-summary-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .mw-stat-box {
+      background: rgba(12, 16, 23, 0.65);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 10px 16px;
+      min-width: 135px;
+    }
+
+    .mw-stat-label {
+      font-size: 11.5px;
+      color: var(--text-secondary);
+      display: block;
+    }
+
+    .mw-stat-val {
+      font-size: 18px;
+      font-weight: 800;
+      margin-top: 2px;
+      display: block;
+    }
+
+    /* Two-column Month Workspace */
+    .month-columns {
+      display: grid;
+      grid-template-columns: 1.05fr 1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    @media (max-width: 980px) {
+      .month-columns {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .workspace-card {
+      padding: 22px 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card-heading-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .card-heading {
+      font-size: 16px;
+      font-weight: 700;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Financial Items List */
+    .fin-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .fin-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      transition: border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .fin-item:hover {
+      border-color: var(--glass-border-highlight);
+      background: rgba(18, 24, 34, 0.85);
+    }
+
+    .fin-item-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .fin-type-pill {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 16px;
+      padding: 0;
+      flex-shrink: 0;
+    }
+
+    .fin-type-pill.income {
+      background: var(--green-soft);
+      color: var(--green-light);
+      border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .fin-type-pill.expense {
+      background: var(--red-soft);
+      color: var(--red-light);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .fin-item-label {
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+      padding: 2px 6px;
+      margin-left: -6px;
+      border-radius: 6px;
+      transition: background 0.15s ease;
+      word-break: break-word;
+    }
+
+    .fin-item-label:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .fin-item-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .fin-item-amount {
+      font-size: 15.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      border: 1px dashed transparent;
+      transition: all 0.15s ease;
+      white-space: nowrap;
+    }
+
+    .fin-item-amount.income {
+      color: var(--green-light);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .fin-item-amount.expense {
+      color: var(--red-light);
+      background: rgba(239, 68, 68, 0.08);
+    }
+
+    .fin-item-amount:hover {
+      border-color: var(--accent-light);
+      background: var(--accent-soft);
+      color: #fff;
+    }
+
+    .icon-btn-del {
+      width: 30px;
+      height: 30px;
+      padding: 0;
+      border-radius: 8px;
+      background: transparent;
+      border-color: transparent;
+      color: var(--text-muted);
+      font-size: 16px;
+      opacity: 0.65;
+    }
+
+    .fin-item:hover .icon-btn-del,
+    .task-item:hover .icon-btn-del {
+      opacity: 1;
+    }
+
+    .icon-btn-del:hover {
+      background: var(--red-soft);
+      color: var(--red-light);
+      border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    /* Comfortable Add Finance Form */
+    .add-fin-box {
+      background: rgba(12, 16, 23, 0.55);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .add-fin-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .type-segmented {
+      display: inline-flex;
+      background: var(--bg-input);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      padding: 3px;
+      gap: 3px;
+    }
+
+    .seg-btn {
+      padding: 6px 12px;
+      font-size: 12.5px;
+      border-radius: 7px;
+      border: none;
+      background: transparent;
+      color: var(--text-secondary);
+    }
+
+    .seg-btn.active-inc {
+      background: var(--green-soft);
+      color: var(--green-light);
+      box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.35);
+    }
+
+    .seg-btn.active-exp {
+      background: var(--red-soft);
+      color: var(--red-light);
+      box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.35);
+    }
+
+    .input-field {
+      background: var(--bg-input);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      padding: 9px 12px;
+      transition: border-color 0.15s ease;
+    }
+
+    .input-field:focus {
+      border-color: var(--accent-light);
+    }
+
+    .input-field::placeholder {
+      color: var(--text-muted);
+    }
+
+    .quick-sum-chips {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quick-sum-label {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      margin-right: 2px;
+    }
+
+    /* Shift Calculator Card (Haval M6 АКПП) */
+    .shift-calc-box {
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.12) 0%, rgba(56, 189, 248, 0.08) 100%);
+      border: 1px solid rgba(139, 92, 246, 0.28);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .shift-calc-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 960px) {
+      .shift-calc-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 480px) {
+      .shift-calc-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .shift-field label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .shift-field .field-hint {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .shift-net-badge {
+      font-weight: 800;
+      font-size: 15.5px;
+      background: rgba(16, 185, 129, 0.12) !important;
+      border-color: rgba(16, 185, 129, 0.35) !important;
+      display: flex;
+      align-items: center;
+      min-height: 38px;
+    }
+
+    .shift-stepper {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .shift-stepper .input-field {
+      text-align: center;
+      width: 100%;
+    }
+
+    .shift-km-details {
+      background: rgba(12, 16, 23, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      animation: liquidStageIn 0.25s var(--spring) both;
+    }
+
+    .shift-km-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    @media (max-width: 580px) {
+      .shift-km-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .shift-metrics-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(12, 16, 23, 0.5);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-sm);
+    }
+
+    @media (max-width: 580px) {
+      .shift-metrics-strip {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .shift-metric-col {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .shift-metric-col .sm-label {
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .shift-metric-col .sm-val {
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .shift-result-banner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      font-size: 13.5px;
+    }
+
+    /* Tasks List with Separate Check & Issue Controls */
+    .tasks-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      background: var(--bg-input);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      transition: all 0.18s ease;
+    }
+
+    .task-item:hover {
+      border-color: var(--glass-border-highlight);
+      background: rgba(18, 24, 34, 0.85);
+    }
+
+    .task-item.status-done {
+      background: rgba(16, 185, 129, 0.06);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+
+    .task-item.status-issue {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .task-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .check-circle-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      padding: 0;
+      flex-shrink: 0;
+      border: 2px solid rgba(148, 163, 184, 0.45);
+      background: rgba(12, 16, 23, 0.8);
+      color: transparent;
+      font-size: 14px;
+      font-weight: 800;
+      transition: all 0.2s var(--spring);
+    }
+
+    .check-circle-btn:hover {
+      border-color: var(--green-light);
+      background: var(--green-soft);
+    }
+
+    .task-item.status-done .check-circle-btn {
+      background: var(--green);
+      border-color: var(--green);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+    }
+
+    .task-content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+      flex: 1;
+    }
+
+    .task-text {
+      font-size: 14.5px;
+      color: var(--text-primary);
+      cursor: pointer;
+      word-break: break-word;
+      padding: 2px 5px;
+      margin-left: -5px;
+      border-radius: 6px;
+      transition: opacity 0.15s ease, background 0.15s ease;
+    }
+
+    .task-text:hover {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    .task-item.status-done .task-text {
+      text-decoration: line-through;
+      color: var(--text-secondary);
+      opacity: 0.7;
+    }
+
+    .task-item.status-issue .task-text {
+      color: #FDE68A;
+    }
+
+    .task-kpi-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: var(--radius-pill);
+      background: var(--accent-soft);
+      color: var(--accent-light);
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .task-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+
+    .issue-toggle-btn {
+      padding: 4px 9px;
+      font-size: 11.5px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid transparent;
+      color: var(--text-muted);
+    }
+
+    .issue-toggle-btn:hover {
+      color: var(--amber-light);
+      background: var(--amber-soft);
+      border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .task-item.status-issue .issue-toggle-btn {
+      background: var(--amber-soft);
+      color: var(--amber-light);
+      border-color: rgba(245, 158, 11, 0.45);
+    }
+
+    /* Filter Pills for Tasks */
+    .filter-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .filter-pill {
+      padding: 5px 11px;
+      font-size: 12px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-secondary);
+      border: 1px solid var(--glass-border);
+    }
+
+    .filter-pill.active {
+      background: var(--accent-soft);
+      color: #fff;
+      border-color: var(--accent-light);
+    }
+
+    /* Notes Area */
+    .notes-textarea {
+      width: 100%;
+      min-height: 92px;
+      resize: vertical;
+      background: var(--bg-input);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-family: var(--font-sans);
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 12px 14px;
+    }
+
+    .notes-textarea:focus {
+      border-color: var(--accent-light);
+    }
+
+    /* Inline Editor Input */
+    .inline-editor {
+      background: #0B0F17;
+      border: 1.5px solid var(--accent-light);
+      border-radius: 8px;
+      color: #fff;
+      font-family: var(--font-sans);
+      font-size: 14.5px;
+      font-weight: 600;
+      padding: 4px 8px;
+      width: 140px;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.35);
+    }
+
+    .inline-editor.wide {
+      width: 100%;
+      min-width: 220px;
+    }
+
+    /* Dialog */
+    dialog.glass-dialog {
+      background: rgba(22, 27, 38, 0.92);
+      backdrop-filter: blur(24px);
+      color: var(--text-primary);
+      border: 1px solid var(--glass-border-highlight);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      max-width: 440px;
+      width: calc(100% - 32px);
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75);
+    }
+
+    dialog.glass-dialog::backdrop {
+      background: rgba(5, 7, 11, 0.72);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      right: 22px;
+      bottom: 22px;
+      z-index: 60;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 12px 18px;
+      background: rgba(24, 30, 44, 0.88);
+      backdrop-filter: blur(16px);
+      color: var(--text-primary);
+      border: 1px solid rgba(139, 92, 246, 0.5);
+      border-radius: var(--radius-md);
+      box-shadow: 0 14px 36px rgba(0, 0, 0, 0.55);
+      opacity: 0;
+      transform: translateY(10px) scale(0.97);
+      pointer-events: none;
+      transition: all 0.25s var(--spring);
+    }
+
+    .toast.visible {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .toast.error {
+      border-color: var(--red);
+    }
+
+    .val-pos { color: var(--green-light); }
+    .val-neg { color: var(--red-light); }
+    .val-warn { color: var(--amber-light); }
+
+    /* Mobile Ergonomics & Safe Area Bottom Dock */
+    @media (max-width: 720px) {
+      .app-container {
+        padding: calc(12px + env(safe-area-inset-top, 0px)) 12px calc(96px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .topbar {
+        padding: 14px 16px;
+        margin-bottom: 16px;
+      }
+
+      .brand-title {
+        font-size: 17px;
+      }
+
+      .nav-dock-wrapper {
+        position: fixed;
+        top: auto;
+        bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+        left: 10px;
+        right: 10px;
+        margin: 0;
+        z-index: 50;
+      }
+
+      .liquid-dock {
+        width: 100%;
+        justify-content: flex-start;
+        padding: 6px;
+        box-shadow: 0 14px 38px rgba(0, 0, 0, 0.8), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+      }
+
+      .dock-tab {
+        padding: 10px 13px;
+        font-size: 13px;
+      }
+
+      .month-workspace-header {
+        padding: 16px 18px;
+      }
+
+      .mw-title {
+        font-size: 21px;
+      }
+
+      .workspace-card {
+        padding: 16px;
+      }
+
+      .input-field,
+      .notes-textarea,
+      .inline-editor {
+        font-size: 16px !important; /* Prevents iOS Safari auto-zoom on focus */
+      }
+
+      .toast {
+        left: 14px;
+        right: 14px;
+        bottom: calc(78px + env(safe-area-inset-bottom, 0px));
+        text-align: center;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient-bg" aria-hidden="true">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+  </div>
+
+  <div class="app-container">
+    <!-- Header -->
+    <header class="topbar glass-panel">
+      <div class="brand-area">
+        <div class="brand-title-row">
+          <div class="brand-logo">₸</div>
+          <div>
+            <h1 class="brand-title">Финансовый и оперативный план</h1>
+          </div>
+        </div>
+        <div class="context-pills">
+          <span class="context-pill highlight">Ноябрь 2026 – Апрель 2027</span>
+          <span class="context-pill">📍 Астана</span>
+          <span class="context-pill">🎓 КазУТБ · КНиИС</span>
+          <span class="context-pill">🚗 Haval M6 (АКПП)</span>
+          <span class="context-pill">🎯 Долг 0 ₸ · LLM PC · Elves Falath EXP</span>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <div class="save-pill" title="Все изменения автоматически сохраняются в браузере">
+          <span class="status-dot"></span>
+          <span id="storageTimestamp">Автосохранение активно</span>
+        </div>
+        <button type="button" class="btn-primary" id="exportJsonBtn" title="Скачать резервную копию данных в JSON">
+          ↓ Экспорт
+        </button>
+        <button type="button" id="importJsonBtn" title="Восстановить данные из JSON-файла">
+          ↑ Импорт
+        </button>
+        <input type="file" id="importFileInput" accept=".json,application/json" hidden />
+        <button type="button" class="btn-ghost-danger" id="resetStateBtn" title="Сбросить все изменения к исходному плану">
+          ↺ Сброс
+        </button>
+      </div>
+    </header>
+
+    <!-- Global KPIs / Target Funds -->
+    <section aria-label="Целевые фонды и обязательства">
+      <div class="section-header">
+        <h2 class="section-title">Целевые фонды и главные цели</h2>
+        <span class="section-hint">Нажмите на сумму или кнопки +10k / +50k для быстрого пополнения</span>
+      </div>
+      <div class="kpi-grid" id="kpiGrid"></div>
+    </section>
+
+    <!-- Sticky Liquid Glass Navigation Dock -->
+    <div class="nav-dock-wrapper">
+      <nav class="liquid-dock" id="liquidDock" aria-label="Навигация по месяцам">
+        <div class="liquid-pill-indicator" id="liquidIndicator"></div>
+        <!-- Tabs rendered dynamically -->
+      </nav>
+    </div>
+
+    <!-- Main Dynamic Stage (Overview or Selected Month) -->
+    <main id="stageContainer"></main>
+  </div>
+
+  <!-- Reset Confirmation Dialog -->
+  <dialog class="glass-dialog" id="resetDialog">
+    <h2 style="margin:0 0 10px;font-size:18px;">Сбросить данные к исходному плану?</h2>
+    <p style="margin:0 0 20px;color:var(--text-secondary);font-size:14px;">
+      Все отметки задач, изменённые суммы, расчёты смен и заметки вернутся к базовому плану (Ноябрь 2026 – Апрель 2027). Рекомендуем сначала сделать «Экспорт».
+    </p>
+    <div style="display:flex;justify-content:flex-end;gap:10px;">
+      <button type="button" id="cancelResetBtn">Отмена</button>
+      <button type="button" class="btn-ghost-danger" id="confirmResetBtn" style="color:var(--red-light);border-color:rgba(239,68,68,0.5);">
+        Да, сбросить
+      </button>
+    </div>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (function () {
+      'use strict';
+
+      // Uses same storage key to seamlessly preserve existing user progress
+      const STORAGE_KEY = 'astana_finops_dashboard_v1';
+
+      function createDefaultState() {
+        return {
+          version: 2,
+          updatedAt: new Date().toISOString(),
+          kpis: [
+            {
+              id: 'cushion',
+              title: 'Неприкосновенная подушка',
+              current: 60000,
+              target: 200000,
+              note: 'База 60 000 ₸ → цель 200 000 ₸ на депозите'
+            },
+            {
+              id: 'mom',
+              title: 'Выплаты маме',
+              current: 0,
+              target: 860000,
+              note: '250k дек + 250k янв + 360k апр'
+            },
+            {
+              id: 'llm',
+              title: 'Фонд ПК под LLM',
+              current: 0,
+              target: 500000,
+              note: 'Чистыми с кармана (+200k от продажи вещей = 700k)'
+            },
+            {
+              id: 'elves',
+              title: 'Фонд Elves Falath EXP',
+              current: 0,
+              target: 520000,
+              note: 'Фреймсет/байк (+120k за продажу фикса Tsunami)'
+            },
+            {
+              id: 'auto',
+              title: 'Авторезерв (Haval M6)',
+              current: 0,
+              target: 65000,
+              note: 'Буфер на ТО, масло и непредвиденные траты'
+            }
+          ],
+          months: [
+            {
+              id: '2026-11',
+              code: 'Ноябрь',
+              shortLabel: 'Ноя 26',
+              year: 2026,
+              month: 11,
+              title: 'Ноябрь 2026',
+              subtitle: 'Стартовая база: ПДД, АКПП, КНиИС и подготовка к зиме',
+              isBaseline: true,
+              shiftCalc: { grossShift: 25000, fuelShift: 7000, completedShifts: 0, mileageKm: 120, consumptionL: 12.5, fuelPriceTenge: 225, showKmDetails: false },
+              finances: [
+                { id: 'f_nov_1', label: 'Актив на депозите (неприкосновенная база)', type: 'income', amount: 60000 },
+                { id: 'f_nov_2', label: 'Входящий долг от братишки (к возврату в дек.)', type: 'income', amount: 175000 }
+              ],
+              tasks: [
+                { id: 't_nov_1', text: 'Закрыть теорию ПДД и сдать экзамен в спецЦОНе', status: 'todo' },
+                { id: 't_nov_2', text: 'Накатать часы практики на АКПП (эстакада, заезд в бокс)', status: 'todo' },
+                { id: 't_nov_3', text: 'Получить водительское удостоверение', status: 'todo' },
+                { id: 't_nov_4', text: 'Проверить Haval M6 (АКПП) к зиме (масло в двигателе и коробке, зимняя резина, незамерзайка)', status: 'todo' },
+                { id: 't_nov_5', text: 'Закрыть лабы и промежуточные тесты на КНиИС (КазУТБ)', status: 'todo' }
+              ],
+              notes: ''
+            },
+            {
+              id: '2026-12',
+              code: 'Декабрь',
+              shortLabel: 'Дек 26',
+              year: 2026,
+              month: 12,
+              title: 'Декабрь 2026',
+              subtitle: 'Сессия + Предновогодний курьерский пик',
+              shiftCalc: { grossShift: 27000, fuelShift: 7500, completedShifts: 0, mileageKm: 125, consumptionL: 13.0, fuelPriceTenge: 225, showKmDetails: false },
+              finances: [
+                { id: 'f_dec_1', label: 'Ожидаемый чистый доход со смен (Haval M6 АКПП)', type: 'income', amount: 390000 },
+                { id: 'f_dec_2', label: 'Возврат долга от братишки', type: 'income', amount: 175000 },
+                { id: 'f_dec_3', label: 'Выплата маме (Транш №1 — обязательный)', type: 'expense', amount: 250000 }
+              ],
+              tasks: [
+                { id: 't_dec_1', text: 'Забрать долг 175 000 ₸ у братишки', status: 'todo' },
+                { id: 't_dec_2', text: 'Закрыть рубежку РК-2 и получить допуск к сессии', status: 'todo' },
+                { id: 't_dec_3', text: 'Сдать первые экзамены зимней сессии', status: 'todo' },
+                { id: 't_dec_4', text: 'Выдать 5 смен в неделю на авто (вечерний час пик)', status: 'todo' },
+                { id: 't_dec_5', text: 'Полностью закрыть Долг №1 перед мамой (250 000 ₸)', status: 'todo', kpiLink: { id: 'mom', delta: 250000, label: 'Маме +250k' } },
+                { id: 't_dec_6', text: 'Отложить 20 000 ₸ в фонд авторезерва Haval M6', status: 'todo', kpiLink: { id: 'auto', delta: 20000, label: 'Авторезерв +20k' } }
+              ],
+              notes: ''
+            },
+            {
+              id: '2027-01',
+              code: 'Январь',
+              shortLabel: 'Янв 27',
+              year: 2027,
+              month: 1,
+              title: 'Январь 2027',
+              subtitle: 'Зимние каникулы + Ударный морозный сезон',
+              shiftCalc: { grossShift: 32500, fuelShift: 8500, completedShifts: 0, mileageKm: 130, consumptionL: 14.0, fuelPriceTenge: 225, showKmDetails: false },
+              finances: [
+                { id: 'f_jan_1', label: 'Чистый доход со смен (10ч смены в бураны/морозы на АКПП)', type: 'income', amount: 580000 },
+                { id: 'f_jan_2', label: 'Продажа старых вещей / комплектующих', type: 'income', amount: 200000 },
+                { id: 'f_jan_3', label: 'Выплата маме (Транш №2 — обязательный)', type: 'expense', amount: 250000 },
+                { id: 'f_jan_4', label: 'Закупка ПК под локальные LLM (бюджет 700k, с кармана 500k)', type: 'expense', amount: 700000 }
+              ],
+              tasks: [
+                { id: 't_jan_1', text: 'Закрыть хвосты сессии до 10 января', status: 'todo' },
+                { id: 't_jan_2', text: 'Выставить на продажу старые вещи/железо на 200 000 ₸', status: 'todo' },
+                { id: 't_jan_3', text: 'Отработать ударные каникулярные смены (морозные кэфы)', status: 'todo' },
+                { id: 't_jan_4', text: 'Передать маме январский платеж 250 000 ₸', status: 'todo', kpiLink: { id: 'mom', delta: 250000, label: 'Маме +250k' } },
+                { id: 't_jan_5', text: 'Собрать и запустить рабочий ПК (Ryzen + GPU 16-24GB под AWQ/GGUF)', status: 'todo', kpiLink: { id: 'llm', delta: 500000, label: 'Фонд ПК +500k' } },
+                { id: 't_jan_6', text: 'Держать режим зала строго утром через день', status: 'todo' }
+              ],
+              notes: ''
+            },
+            {
+              id: '2027-02',
+              code: 'Февраль',
+              shortLabel: 'Фев 27',
+              year: 2027,
+              month: 2,
+              title: 'Февраль 2027',
+              subtitle: 'Старт 2-го семестра + Укрепление тыла',
+              shiftCalc: { grossShift: 24500, fuelShift: 7500, completedShifts: 0, mileageKm: 120, consumptionL: 13.0, fuelPriceTenge: 225, showKmDetails: false },
+              finances: [
+                { id: 'f_feb_1', label: 'Ожидаемый чистый доход со смен (учеба + зал + 5 смен)', type: 'income', amount: 340000 },
+                { id: 'f_feb_2', label: 'Обязательные выплаты долга', type: 'expense', amount: 0 }
+              ],
+              tasks: [
+                { id: 't_feb_1', text: 'Влиться в расписание 2-го семестра в КазУТБ (C++, структуры данных)', status: 'todo' },
+                { id: 't_feb_2', text: 'Пополнить неприкосновенную подушку безопасности до 200 000 ₸ (+140k на депозит)', status: 'todo', kpiLink: { id: 'cushion', delta: 140000, label: 'Депозит +140k' } },
+                { id: 't_feb_3', text: 'Отложить первые 150 000 ₸ в фонд Elves Falath EXP', status: 'todo', kpiLink: { id: 'elves', delta: 150000, label: 'Elves +150k' } },
+                { id: 't_feb_4', text: 'Плановое ТО Haval M6 АКПП (замена масла и фильтров после зимних нагрузок)', status: 'todo' }
+              ],
+              notes: ''
+            },
+            {
+              id: '2027-03',
+              code: 'Март',
+              shortLabel: 'Мар 27',
+              year: 2027,
+              month: 3,
+              title: 'Март 2027',
+              subtitle: 'Наурыз + Предсезонная подготовка',
+              shiftCalc: { grossShift: 26000, fuelShift: 7000, completedShifts: 0, mileageKm: 120, consumptionL: 12.5, fuelPriceTenge: 225, showKmDetails: false },
+              finances: [
+                { id: 'f_mar_1', label: 'Чистый доход со смен (ударные смены в Наурыз)', type: 'income', amount: 380000 },
+                { id: 'f_mar_2', label: 'Продажа велосипеда Tsunami SNM100', type: 'income', amount: 120000 }
+              ],
+              tasks: [
+                { id: 't_mar_1', text: 'Предпродажная подготовка и продажа Tsunami SNM100 за 120 000 ₸', status: 'todo', kpiLink: { id: 'elves', delta: 120000, label: 'Elves +120k' } },
+                { id: 't_mar_2', text: 'Отработать 5 выходных дней Наурыза на доставках', status: 'todo' },
+                { id: 't_mar_3', text: 'Аккумулировать на счете сумму 360 000 ₸ для апрельского платежа маме', status: 'todo' },
+                { id: 't_mar_4', text: 'Перебрать шоссейник Twitter R5 Pro к сухому асфальту', status: 'todo' }
+              ],
+              notes: ''
+            },
+            {
+              id: '2027-04',
+              code: 'Апрель',
+              shortLabel: 'Апр 27',
+              year: 2027,
+              month: 4,
+              title: 'Апрель 2027',
+              subtitle: 'Финальное обязательство + Подготовка к велосезону',
+              shiftCalc: { grossShift: 23500, fuelShift: 6500, completedShifts: 0, mileageKm: 120, consumptionL: 12.0, fuelPriceTenge: 225, showKmDetails: false },
+              finances: [
+                { id: 'f_apr_1', label: 'Ожидаемый чистый доход со смен', type: 'income', amount: 340000 },
+                { id: 'f_apr_2', label: 'Финальная выплата маме (Транш №3 — закрытие 100%)', type: 'expense', amount: 360000 }
+              ],
+              tasks: [
+                { id: 't_apr_1', text: 'Полностью выплатить маме финальные 360 000 ₸ (Все долги закрыты на 100%)', status: 'todo', kpiLink: { id: 'mom', delta: 360000, label: 'Маме +360k' } },
+                { id: 't_apr_2', text: 'Зафиксировать чистый остаток и заказать фреймсет/байк Elves Falath EXP из Китая', status: 'todo', kpiLink: { id: 'elves', delta: 250000, label: 'Elves +250k' } },
+                { id: 't_apr_3', text: 'Сохранить неприкосновенный депозит 200 000 ₸ нетронутым', status: 'todo' }
+              ],
+              notes: ''
+            }
+          ]
+        };
+      }
+
+      const SHORT_LABELS = {
+        '2026-11': 'Ноя 26',
+        '2026-12': 'Дек 26',
+        '2027-01': 'Янв 27',
+        '2027-02': 'Фев 27',
+        '2027-03': 'Мар 27',
+        '2027-04': 'Апр 27'
+      };
+
+      let state = loadState();
+      let activeTab = detectInitialTab();
+      let activeTaskFilter = 'all';
+      let newFinDraftType = 'income';
+      let toastTimer = null;
+
+      function detectInitialTab() {
+        const now = new Date();
+        const ym = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+        const found = state.months.find(function (m) { return m.id === ym; });
+        return found ? found.id : 'overview';
+      }
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return createDefaultState();
+          const parsed = JSON.parse(raw);
+          if (!parsed || !Array.isArray(parsed.kpis) || !Array.isArray(parsed.months)) {
+            return createDefaultState();
+          }
+          return normalizeState(parsed);
+        } catch (err) {
+          return createDefaultState();
+        }
+      }
+
+      function normalizeState(data) {
+        const defaults = createDefaultState();
+        return {
+          version: 2,
+          updatedAt: data.updatedAt || new Date().toISOString(),
+          kpis: data.kpis.map(function (k, idx) {
+            return {
+              id: String(k.id || 'kpi_' + idx),
+              title: String(k.title || 'KPI'),
+              current: Number.isFinite(Number(k.current)) ? Math.round(Number(k.current)) : 0,
+              target: Number.isFinite(Number(k.target)) ? Math.max(0, Math.round(Number(k.target))) : 0,
+              note: String(k.note || '')
+            };
+          }),
+          months: data.months.map(function (m, idx) {
+            const defMonth = defaults.months[idx] || {};
+            const id = String(m.id || defMonth.id || 'm_' + idx);
+            return {
+              id: id,
+              code: String(m.code || defMonth.code || 'Месяц'),
+              shortLabel: SHORT_LABELS[id] || m.shortLabel || m.title || id,
+              year: Number(m.year) || 2026,
+              month: Number(m.month) || 11,
+              title: String(m.title || 'Месяц'),
+              subtitle: String(m.subtitle || '').replace(/МКПП/g, 'АКПП'),
+              isBaseline: Boolean(m.isBaseline),
+              shiftCalc: {
+                grossShift: Number(m.shiftCalc && m.shiftCalc.grossShift) || (m.shiftCalc && Number(m.shiftCalc.avgShift) ? Math.round(Number(m.shiftCalc.avgShift) + 7000) : (defMonth.shiftCalc ? defMonth.shiftCalc.grossShift : 26000)),
+                fuelShift: Number(m.shiftCalc && m.shiftCalc.fuelShift) || (defMonth.shiftCalc ? defMonth.shiftCalc.fuelShift : 7000),
+                completedShifts: (m.shiftCalc && Number.isFinite(Number(m.shiftCalc.completedShifts))) ? Math.max(0, Number(m.shiftCalc.completedShifts)) : 0,
+                mileageKm: Number(m.shiftCalc && m.shiftCalc.mileageKm) || (defMonth.shiftCalc ? defMonth.shiftCalc.mileageKm : 120),
+                consumptionL: Number(m.shiftCalc && m.shiftCalc.consumptionL) || (defMonth.shiftCalc ? defMonth.shiftCalc.consumptionL : 12.5),
+                fuelPriceTenge: Number(m.shiftCalc && m.shiftCalc.fuelPriceTenge) || (defMonth.shiftCalc ? defMonth.shiftCalc.fuelPriceTenge : 225),
+                showKmDetails: Boolean(m.shiftCalc && m.shiftCalc.showKmDetails)
+              },
+              finances: Array.isArray(m.finances) ? m.finances.map(function (f, fIdx) {
+                return {
+                  id: String(f.id || 'f_' + idx + '_' + fIdx),
+                  label: String(f.label || 'Статья').replace(/МКПП/g, 'АКПП'),
+                  type: f.type === 'expense' ? 'expense' : 'income',
+                  amount: Number.isFinite(Number(f.amount)) ? Math.abs(Math.round(Number(f.amount))) : 0
+                };
+              }) : [],
+              tasks: Array.isArray(m.tasks) ? m.tasks.map(function (t, tIdx) {
+                const st = (t.status === 'done' || t.status === 'issue') ? t.status : 'todo';
+                return {
+                  id: String(t.id || 't_' + idx + '_' + tIdx),
+                  text: String(t.text || 'Задача').replace(/МКПП/g, 'АКПП'),
+                  status: st,
+                  kpiLink: t.kpiLink ? {
+                    id: String(t.kpiLink.id),
+                    delta: Number(t.kpiLink.delta) || 0,
+                    label: String(t.kpiLink.label || '')
+                  } : undefined,
+                  appliedAmount: Number(t.appliedAmount) || 0
+                };
+              }) : [],
+              notes: typeof m.notes === 'string' ? m.notes : ''
+            };
+          })
+        };
+      }
+
+      function saveState() {
+        state.updatedAt = new Date().toISOString();
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          updateStorageBadge();
+        } catch (err) {
+          showToast('Не удалось сохранить в localStorage', true);
+        }
+      }
+
+      function updateStorageBadge() {
+        const el = document.getElementById('storageTimestamp');
+        if (!el) return;
+        const d = new Date(state.updatedAt || Date.now());
+        const hh = String(d.getHours()).padStart(2, '0');
+        const mm = String(d.getMinutes()).padStart(2, '0');
+        el.textContent = 'Сохранено в ' + hh + ':' + mm;
+      }
+
+      function showToast(msg, isError) {
+        const toast = document.getElementById('toast');
+        if (!toast) return;
+        toast.textContent = msg;
+        toast.classList.toggle('error', Boolean(isError));
+        toast.classList.add('visible');
+        if (toastTimer) clearTimeout(toastTimer);
+        toastTimer = setTimeout(function () {
+          toast.classList.remove('visible');
+        }, 2500);
+      }
+
+      function esc(str) {
+        return String(str)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#39;');
+      }
+
+      function formatTenge(num, withSign) {
+        const n = Math.round(Number(num) || 0);
+        const absStr = Math.abs(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+        if (withSign) {
+          if (n > 0) return '+' + absStr + ' ₸';
+          if (n < 0) return '−' + absStr + ' ₸';
+        }
+        return (n < 0 ? '−' : '') + absStr + ' ₸';
+      }
+
+      function parseNumericInput(raw) {
+        if (typeof raw !== 'string') return null;
+        const cleaned = raw.replace(/[₸\s_kкKК,]/gi, function (match) {
+          if (match.toLowerCase() === 'k' || match.toLowerCase() === 'к') return '000';
+          return '';
+        }).replace(/−/g, '-');
+        if (!cleaned) return 0;
+        if (!/^[+-]?\d+([+-]\d+)*$/.test(cleaned)) return null;
+        const tokens = cleaned.match(/[+-]?\d+/g);
+        if (!tokens) return null;
+        let total = 0;
+        for (let i = 0; i < tokens.length; i++) {
+          total += parseInt(tokens[i], 10);
+        }
+        return Number.isFinite(total) ? total : null;
+      }
+
+      function uid(prefix) {
+        return prefix + '_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 6);
+      }
+
+      function isTaskDoneById(taskId) {
+        for (let i = 0; i < state.months.length; i++) {
+          const tasks = state.months[i].tasks;
+          for (let j = 0; j < tasks.length; j++) {
+            if (tasks[j].id === taskId) return tasks[j].status === 'done';
+          }
+        }
+        return false;
+      }
+
+      /* ---------------- KPI RENDER ---------------- */
+      function renderKPIs() {
+        const container = document.getElementById('kpiGrid');
+        if (!container) return;
+
+        container.innerHTML = state.kpis.map(function (kpi) {
+          const pctRaw = kpi.target > 0 ? (kpi.current / kpi.target) * 100 : 0;
+          const pctClamped = Math.max(0, Math.min(100, pctRaw));
+          const pctDisplay = Math.round(Math.max(0, pctRaw));
+          const isComplete = kpi.target > 0 && kpi.current >= kpi.target;
+          const statusClass = isComplete ? 'completed' : (kpi.current > 0 ? 'in-progress' : '');
+
+          let bottomExtra = '';
+          if (kpi.id === 'mom') {
+            const decPaid = isTaskDoneById('t_dec_5') || kpi.current >= 250000;
+            const janPaid = isTaskDoneById('t_jan_4') || kpi.current >= 500000;
+            const aprPaid = isTaskDoneById('t_apr_1') || kpi.current >= 860000;
+            bottomExtra =
+              '<div class="tranche-row">' +
+                '<span class="tranche-badge ' + (decPaid ? 'paid' : '') + '">Дек 250k</span>' +
+                '<span class="tranche-badge ' + (janPaid ? 'paid' : '') + '">Янв 250k</span>' +
+                '<span class="tranche-badge ' + (aprPaid ? 'paid' : '') + '">Апр 360k</span>' +
+              '</div>';
+          } else {
+            bottomExtra =
+              '<div class="kpi-quick-actions">' +
+                '<button type="button" class="chip-btn" data-kpi-bump="10000" data-kpi-id="' + esc(kpi.id) + '">+10k</button>' +
+                '<button type="button" class="chip-btn" data-kpi-bump="50000" data-kpi-id="' + esc(kpi.id) + '">+50k</button>' +
+                '<button type="button" class="chip-btn" data-kpi-bump="-10000" data-kpi-id="' + esc(kpi.id) + '">−10k</button>' +
+              '</div>';
+          }
+
+          return (
+            '<article class="kpi-card glass-panel ' + statusClass + '" data-kpi-id="' + esc(kpi.id) + '">' +
+              '<div>' +
+                '<div class="kpi-top">' +
+                  '<h3 class="kpi-title">' + esc(kpi.title) + '</h3>' +
+                  '<span class="kpi-badge num">' + pctDisplay + '%</span>' +
+                '</div>' +
+                '<div class="kpi-amounts num">' +
+                  '<span class="kpi-current" data-edit-kpi="current" data-kpi-id="' + esc(kpi.id) + '" title="Нажмите, чтобы ввести точную сумму">' +
+                    formatTenge(kpi.current, false) +
+                    ' <span style="font-size:12px;opacity:0.45;font-weight:400;">✎</span>' +
+                  '</span>' +
+                  '<span class="kpi-target" data-edit-kpi="target" data-kpi-id="' + esc(kpi.id) + '" title="Нажмите, чтобы изменить целевую сумму">' +
+                    'из ' + formatTenge(kpi.target, false) +
+                  '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div>' +
+                '<div class="progress-bar-track">' +
+                  '<div class="progress-bar-fill" style="width:' + pctClamped.toFixed(1) + '%;"></div>' +
+                '</div>' +
+                '<div class="kpi-note" style="margin-top:8px;">' + esc(kpi.note) + '</div>' +
+                bottomExtra +
+              '</div>' +
+            '</article>'
+          );
+        }).join('');
+      }
+
+      /* ---------------- LIQUID DOCK RENDER ---------------- */
+      function renderDock() {
+        const dock = document.getElementById('liquidDock');
+        if (!dock) return;
+
+        const now = new Date();
+        const curYm = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0');
+
+        let totalDone = 0;
+        let totalTasks = 0;
+        state.months.forEach(function (m) {
+          totalTasks += m.tasks.length;
+          totalDone += m.tasks.filter(function (t) { return t.status === 'done'; }).length;
+        });
+
+        let tabsHtml =
+          '<button type="button" class="dock-tab ' + (activeTab === 'overview' ? 'active' : '') + '" data-tab="overview">' +
+            '<span>📊 Сводка</span>' +
+            '<span class="dock-tab-badge num">' + totalDone + '/' + totalTasks + '</span>' +
+          '</button>';
+
+        state.months.forEach(function (m) {
+          const isCurrent = m.id === curYm;
+          const doneCount = m.tasks.filter(function (t) { return t.status === 'done'; }).length;
+          const totalCount = m.tasks.length;
+          const isActive = activeTab === m.id;
+
+          tabsHtml +=
+            '<button type="button" class="dock-tab ' + (isActive ? 'active' : '') + '" data-tab="' + esc(m.id) + '">' +
+              (isCurrent ? '<span class="dock-tab-dot" title="Текущий месяц"></span>' : '') +
+              '<span>' + esc(m.shortLabel || m.title) + '</span>' +
+              '<span class="dock-tab-badge num">' + doneCount + '/' + totalCount + '</span>' +
+            '</button>';
+        });
+
+        // Keep indicator element and update buttons
+        const indicator = document.getElementById('liquidIndicator');
+        dock.innerHTML = '';
+        if (indicator) dock.appendChild(indicator);
+        dock.insertAdjacentHTML('beforeend', tabsHtml);
+
+        requestAnimationFrame(updateLiquidIndicator);
+      }
+
+      function updateLiquidIndicator() {
+        const dock = document.getElementById('liquidDock');
+        const indicator = document.getElementById('liquidIndicator');
+        if (!dock || !indicator) return;
+        const activeBtn = dock.querySelector('.dock-tab.active');
+        if (!activeBtn) return;
+
+        const dockRect = dock.getBoundingClientRect();
+        const btnRect = activeBtn.getBoundingClientRect();
+        const offsetLeft = btnRect.left - dockRect.left + dock.scrollLeft;
+
+        indicator.style.width = btnRect.width + 'px';
+        indicator.style.transform = 'translateX(' + offsetLeft + 'px)';
+        activeBtn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
+
+      window.addEventListener('resize', updateLiquidIndicator);
+
+      function switchTab(newTabId) {
+        if (newTabId === activeTab) return;
+        activeTab = newTabId;
+        const dock = document.getElementById('liquidDock');
+        if (dock) {
+          dock.classList.add('switching');
+          setTimeout(function () { dock.classList.remove('switching'); }, 420);
+        }
+        renderDock();
+        renderStage();
+      }
+
+      /* ---------------- STAGE RENDER (OVERVIEW OR MONTH) ---------------- */
+      function renderStage() {
+        const container = document.getElementById('stageContainer');
+        if (!container) return;
+
+        if (activeTab === 'overview') {
+          container.innerHTML = renderOverviewHtml();
+        } else {
+          const month = state.months.find(function (m) { return m.id === activeTab; });
+          if (month) {
+            container.innerHTML = renderMonthWorkspaceHtml(month);
+            const notesEl = container.querySelector('textarea[data-notes-month]');
+            if (notesEl) notesEl.value = month.notes || '';
+          }
+        }
+      }
+
+      function renderOverviewHtml() {
+        let opIncome = 0;
+        let opExpense = 0;
+        let totalTasks = 0;
+        let doneTasks = 0;
+        let issueTasks = 0;
+        let maxMonthVal = 100000;
+
+        const monthSummaries = state.months.map(function (m) {
+          let mIn = 0;
+          let mOut = 0;
+          m.finances.forEach(function (f) {
+            if (f.type === 'income') mIn += f.amount;
+            else mOut += f.amount;
+          });
+          if (!m.isBaseline) {
+            opIncome += mIn;
+            opExpense += mOut;
+          }
+          if (mIn > maxMonthVal) maxMonthVal = mIn;
+          if (mOut > maxMonthVal) maxMonthVal = mOut;
+
+          const mDone = m.tasks.filter(function (t) { return t.status === 'done'; }).length;
+          const mIssue = m.tasks.filter(function (t) { return t.status === 'issue'; }).length;
+          totalTasks += m.tasks.length;
+          doneTasks += mDone;
+          issueTasks += mIssue;
+
+          return {
+            month: m,
+            mIn: mIn,
+            mOut: mOut,
+            net: mIn - mOut,
+            done: mDone,
+            issue: mIssue,
+            total: m.tasks.length
+          };
+        });
+
+        const netFlow = opIncome - opExpense;
+        const momKpi = state.kpis.find(function (k) { return k.id === 'mom'; });
+        const momRemaining = momKpi ? Math.max(0, momKpi.target - momKpi.current) : 0;
+        const pctTasks = totalTasks > 0 ? Math.round((doneTasks / totalTasks) * 100) : 0;
+
+        const chartColsHtml = monthSummaries.map(function (s) {
+          const inHeight = Math.max(6, Math.round((s.mIn / maxMonthVal) * 108));
+          const outHeight = Math.max(6, Math.round((s.mOut / maxMonthVal) * 108));
+          const isPos = s.net >= 0;
+
+          return (
+            '<div class="chart-col" data-goto-month="' + esc(s.month.id) + '" title="Открыть ' + esc(s.month.title) + '">' +
+              '<div class="chart-bars-wrap">' +
+                '<div class="bar-pillar income" style="height:' + inHeight + 'px;" title="Приход: ' + formatTenge(s.mIn, false) + '"></div>' +
+                '<div class="bar-pillar expense" style="height:' + outHeight + 'px;" title="Расход: ' + formatTenge(s.mOut, false) + '"></div>' +
+              '</div>' +
+              '<span class="chart-col-title">' + esc(s.month.shortLabel) + '</span>' +
+              '<span class="chart-col-net num ' + (isPos ? 'pos' : 'neg') + '">' + formatTenge(s.net, true) + '</span>' +
+            '</div>'
+          );
+        }).join('');
+
+        const miniCardsHtml = monthSummaries.map(function (s) {
+          const pct = s.total > 0 ? Math.round((s.done / s.total) * 100) : 0;
+          return (
+            '<article class="mini-month-card glass-panel" data-goto-month="' + esc(s.month.id) + '">' +
+              '<div>' +
+                '<div style="display:flex;justify-content:space-between;align-items:center;gap:8px;">' +
+                  '<span style="font-size:12px;font-weight:700;color:var(--accent-light);">' + esc(s.month.code) + '</span>' +
+                  '<span class="dock-tab-badge num">' + s.done + '/' + s.total + ' задач (' + pct + '%)</span>' +
+                '</div>' +
+                '<h3 style="margin:6px 0 4px;font-size:18px;">' + esc(s.month.title) + '</h3>' +
+                '<p style="margin:0;font-size:13px;color:var(--text-secondary);">' + esc(s.month.subtitle) + '</p>' +
+              '</div>' +
+              '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:12px;border-top:1px solid var(--glass-border);font-size:13px;" class="num">' +
+                '<span class="val-pos">' + formatTenge(s.mIn, true) + '</span>' +
+                '<span class="val-neg">−' + formatTenge(s.mOut, false) + '</span>' +
+                '<strong class="' + (s.net >= 0 ? 'val-pos' : 'val-warn') + '">Итог: ' + formatTenge(s.net, true) + '</strong>' +
+              '</div>' +
+            '</article>'
+          );
+        }).join('');
+
+        return (
+          '<div class="stage-view">' +
+            '<div class="overview-metrics">' +
+              '<div class="metric-card glass-panel">' +
+                '<span class="metric-label">Ожидаемый приход (Дек–Апр)</span>' +
+                '<span class="metric-value num val-pos">' + formatTenge(opIncome, true) + '</span>' +
+                '<span class="metric-sub">Курьерские смены + продажа вещей</span>' +
+              '</div>' +
+              '<div class="metric-card glass-panel">' +
+                '<span class="metric-label">Целевые расходы (Дек–Апр)</span>' +
+                '<span class="metric-value num val-neg">−' + formatTenge(opExpense, false) + '</span>' +
+                '<span class="metric-sub">Транши маме + сборка ПК под LLM</span>' +
+              '</div>' +
+              '<div class="metric-card glass-panel">' +
+                '<span class="metric-label">Остаток долга маме</span>' +
+                '<span class="metric-value num">' + formatTenge(momRemaining, false) + '</span>' +
+                '<span class="metric-sub">Чистое сальдо периода: ' + formatTenge(netFlow, true) + '</span>' +
+              '</div>' +
+              '<div class="metric-card glass-panel">' +
+                '<span class="metric-label">Прогресс задач (6 мес.)</span>' +
+                '<span class="metric-value num">' + doneTasks + ' из ' + totalTasks + ' (' + pctTasks + '%)</span>' +
+                '<span class="metric-sub">' + (issueTasks > 0 ? '⚠️ Переносов/срывов: ' + issueTasks : 'Срывов нет, идём по плану') + '</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div class="chart-card glass-panel">' +
+              '<div class="chart-header">' +
+                '<div>' +
+                  '<h3 style="margin:0;font-size:16px;">Динамика денежного потока по месяцам</h3>' +
+                  '<span style="font-size:12.5px;color:var(--text-secondary);">Нажмите на любой столбец, чтобы перейти к детальному плану месяца</span>' +
+                '</div>' +
+                '<div class="chart-legend">' +
+                  '<span class="legend-item"><span class="legend-swatch" style="background:var(--green-light);"></span> Приход</span>' +
+                  '<span class="legend-item"><span class="legend-swatch" style="background:var(--red-light);"></span> Расход</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="chart-columns">' + chartColsHtml + '</div>' +
+            '</div>' +
+
+            '<div class="section-header">' +
+              '<h3 class="section-title">Быстрый обзор всех месяцев</h3>' +
+            '</div>' +
+            '<div class="overview-months-grid">' + miniCardsHtml + '</div>' +
+          '</div>'
+        );
+      }
+
+      function renderMonthWorkspaceHtml(m) {
+        let sumIn = 0;
+        let sumOut = 0;
+        let shiftTargetIncome = 0;
+
+        m.finances.forEach(function (f) {
+          if (f.type === 'income') {
+            sumIn += f.amount;
+            if (f.label.toLowerCase().indexOf('смен') !== -1) {
+              shiftTargetIncome += f.amount;
+            }
+          } else {
+            sumOut += f.amount;
+          }
+        });
+        if (shiftTargetIncome === 0 && !m.isBaseline) {
+          shiftTargetIncome = sumIn;
+        }
+
+        const net = sumIn - sumOut;
+        const totalTasks = m.tasks.length;
+        const doneTasks = m.tasks.filter(function (t) { return t.status === 'done'; }).length;
+        const issueTasks = m.tasks.filter(function (t) { return t.status === 'issue'; }).length;
+
+        const grossShift = Math.max(0, m.shiftCalc.grossShift || 26000);
+        const fuelShift = Math.max(0, m.shiftCalc.fuelShift || 7000);
+        const netShift = Math.max(0, grossShift - fuelShift);
+        const completedShifts = Math.max(0, m.shiftCalc.completedShifts || 0);
+
+        const earnedNetFromShifts = completedShifts * netShift;
+        const totalFuelSpent = completedShifts * fuelShift;
+        const totalGrossEarned = completedShifts * grossShift;
+
+        const remainingToEarn = Math.max(0, shiftTargetIncome - earnedNetFromShifts);
+        const remainingShifts = netShift > 0 ? Math.ceil(remainingToEarn / netShift) : 0;
+
+        const showKmDetails = Boolean(m.shiftCalc.showKmDetails);
+        const mileageKm = m.shiftCalc.mileageKm || 120;
+        const consumptionL = m.shiftCalc.consumptionL || 12.5;
+        const fuelPriceTenge = m.shiftCalc.fuelPriceTenge || 225;
+        const autoCalcFuel = Math.round(mileageKm * (consumptionL / 100) * fuelPriceTenge);
+
+        const finItemsHtml = m.finances.map(function (f) {
+          const isInc = f.type === 'income';
+          const sign = isInc ? '+' : '−';
+          return (
+            '<div class="fin-item" data-month-id="' + esc(m.id) + '" data-fin-id="' + esc(f.id) + '">' +
+              '<div class="fin-item-left">' +
+                '<button type="button" class="fin-type-pill ' + f.type + '" data-action="toggle-fin-type" data-month-id="' + esc(m.id) + '" data-fin-id="' + esc(f.id) + '" title="Нажмите, чтобы переключить Приход / Расход">' +
+                  sign +
+                '</button>' +
+                '<span class="fin-item-label" data-action="edit-fin-label" data-month-id="' + esc(m.id) + '" data-fin-id="' + esc(f.id) + '" title="Нажмите, чтобы переименовать">' +
+                  esc(f.label) +
+                '</span>' +
+              '</div>' +
+              '<div class="fin-item-right">' +
+                '<span class="fin-item-amount num ' + f.type + '" data-action="edit-fin-amount" data-month-id="' + esc(m.id) + '" data-fin-id="' + esc(f.id) + '" title="Нажмите, чтобы изменить сумму">' +
+                  formatTenge(isInc ? f.amount : -f.amount, true) +
+                '</span>' +
+                '<button type="button" class="icon-btn-del" data-action="delete-fin" data-month-id="' + esc(m.id) + '" data-fin-id="' + esc(f.id) + '" title="Удалить статью">×</button>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('');
+
+        const filteredTasks = m.tasks.filter(function (t) {
+          if (activeTaskFilter === 'all') return true;
+          return t.status === activeTaskFilter;
+        });
+
+        const tasksListHtml = filteredTasks.length > 0 ? filteredTasks.map(function (t) {
+          const isDone = t.status === 'done';
+          const isIssue = t.status === 'issue';
+          return (
+            '<div class="task-item status-' + t.status + '" data-month-id="' + esc(m.id) + '" data-task-id="' + esc(t.id) + '">' +
+              '<div class="task-left">' +
+                '<button type="button" class="check-circle-btn" data-action="toggle-task-done" data-month-id="' + esc(m.id) + '" data-task-id="' + esc(t.id) + '" title="Отметить выполненным / снять отметку">' +
+                  (isDone ? '✓' : '') +
+                '</button>' +
+                '<div class="task-content">' +
+                  '<span class="task-text" data-action="edit-task-text" data-month-id="' + esc(m.id) + '" data-task-id="' + esc(t.id) + '" title="Нажмите на текст для редактирования">' +
+                    esc(t.text) +
+                  '</span>' +
+                  (t.kpiLink ? '<span class="task-kpi-pill" title="Автоматически пополняет целевой фонд при выполнении">⚡ ' + esc(t.kpiLink.label) + '</span>' : '') +
+                '</div>' +
+              '</div>' +
+              '<div class="task-actions">' +
+                '<button type="button" class="issue-toggle-btn" data-action="toggle-task-issue" data-month-id="' + esc(m.id) + '" data-task-id="' + esc(t.id) + '" title="Отметить срыв или перенос задачи">' +
+                  (isIssue ? '⚠️ Перенос' : '⚠️') +
+                '</button>' +
+                '<button type="button" class="icon-btn-del" data-action="delete-task" data-month-id="' + esc(m.id) + '" data-task-id="' + esc(t.id) + '" title="Удалить задачу">×</button>' +
+              '</div>' +
+            '</div>'
+          );
+        }).join('') : '<div style="padding:18px;text-align:center;color:var(--text-muted);font-size:14px;">Нет задач в выбранном фильтре</div>';
+
+        return (
+          '<div class="stage-view">' +
+            '<!-- Month Header -->' +
+            '<div class="month-workspace-header glass-panel">' +
+              '<div class="mw-title-area">' +
+                '<div class="mw-eyebrow">' +
+                  '<span>' + esc(m.code) + ' // План месяца</span>' +
+                '</div>' +
+                '<h2 class="mw-title">' + esc(m.title) + '</h2>' +
+                '<div class="mw-subtitle">' + esc(m.subtitle) + '</div>' +
+              '</div>' +
+              '<div class="mw-summary-pills num">' +
+                '<div class="mw-stat-box">' +
+                  '<span class="mw-stat-label">Приход</span>' +
+                  '<span class="mw-stat-val val-pos">' + formatTenge(sumIn, true) + '</span>' +
+                '</div>' +
+                '<div class="mw-stat-box">' +
+                  '<span class="mw-stat-label">Расход</span>' +
+                  '<span class="mw-stat-val val-neg">−' + formatTenge(sumOut, false) + '</span>' +
+                '</div>' +
+                '<div class="mw-stat-box">' +
+                  '<span class="mw-stat-label">' + (m.isBaseline ? 'База / Активы' : 'Чистый остаток') + '</span>' +
+                  '<span class="mw-stat-val ' + (net >= 0 ? 'val-pos' : 'val-warn') + '">' + formatTenge(net, true) + '</span>' +
+                '</div>' +
+              '</div>' +
+            '</div>' +
+
+            '<!-- Two Columns -->' +
+            '<div class="month-columns">' +
+              '<!-- Left Column: Finances & Shift Calculator -->' +
+              '<div style="display:flex;flex-direction:column;gap:18px;">' +
+                '<section class="workspace-card glass-panel">' +
+                  '<div class="card-heading-row">' +
+                    '<h3 class="card-heading">💰 Доходы и расходы месяца</h3>' +
+                    '<span style="font-size:12px;color:var(--text-secondary);">Нажмите на сумму или название для правки</span>' +
+                  '</div>' +
+
+                  '<div class="fin-list">' + finItemsHtml + '</div>' +
+
+                  '<!-- Direct Add Finance Form -->' +
+                  '<form class="add-fin-box" data-form="add-fin" data-month-id="' + esc(m.id) + '">' +
+                    '<div style="font-size:12.5px;font-weight:600;color:var(--text-secondary);">Добавить статью сразу с суммой:</div>' +
+                    '<div class="add-fin-row">' +
+                      '<div class="type-segmented">' +
+                        '<button type="button" class="seg-btn ' + (newFinDraftType === 'income' ? 'active-inc' : '') + '" data-set-fintype="income">+ Приход</button>' +
+                        '<button type="button" class="seg-btn ' + (newFinDraftType === 'expense' ? 'active-exp' : '') + '" data-set-fintype="expense">− Расход</button>' +
+                      '</div>' +
+                      '<input type="text" class="input-field" name="finLabel" placeholder="Название (напр. Бонус со смен, Замена масла)" style="flex:1;min-width:170px;" required />' +
+                      '<input type="text" class="input-field num" name="finAmount" id="draftFinAmountInput" placeholder="Сумма ₸" style="width:125px;" required />' +
+                      '<button type="submit" class="btn-primary">Добавить</button>' +
+                    '</div>' +
+                    '<div class="quick-sum-chips">' +
+                      '<span class="quick-sum-label">Быстрая сумма:</span>' +
+                      '<button type="button" class="chip-btn" data-quick-fin-sum="10000">+10k</button>' +
+                      '<button type="button" class="chip-btn" data-quick-fin-sum="25000">+25k</button>' +
+                      '<button type="button" class="chip-btn" data-quick-fin-sum="50000">+50k</button>' +
+                      '<button type="button" class="chip-btn" data-quick-fin-sum="100000">+100k</button>' +
+                      '<button type="button" class="chip-btn" data-quick-fin-sum="clear">Сброс</button>' +
+                    '</div>' +
+                  '</form>' +
+                '</section>' +
+
+                '<!-- Shift Calculator (Haval M6 АКПП) -->' +
+                '<section class="shift-calc-box glass-panel">' +
+                  '<div class="card-heading-row">' +
+                    '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                      '<h3 class="card-heading" style="font-size:15px;">🚗 Калькулятор чистых со смен // Haval M6 (АКПП)</h3>' +
+                    '</div>' +
+                    '<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">' +
+                      '<button type="button" class="btn-sm" data-action="toggle-km-details" data-month-id="' + esc(m.id) + '">' +
+                        (showKmDetails ? '▲ Скрыть расчёт топлива' : '⚙️ Расход по пробегу (км)') +
+                      '</button>' +
+                      '<span style="font-size:12px;color:var(--accent-light);">План чистыми: <strong class="num">' + formatTenge(shiftTargetIncome, false) + '</strong></span>' +
+                    '</div>' +
+                  '</div>' +
+
+                  (showKmDetails ? (
+                    '<div class="shift-km-details">' +
+                      '<div style="display:flex;justify-content:space-between;align-items:center;font-size:12px;color:var(--text-secondary);flex-wrap:wrap;gap:6px;">' +
+                        '<span>Параметры расхода Haval M6 АКПП (город Астана / прогревы):</span>' +
+                        '<span>По формуле: <strong class="num val-warn">' + formatTenge(autoCalcFuel, false) + '</strong> за смену</span>' +
+                      '</div>' +
+                      '<div class="shift-km-grid">' +
+                        '<div class="shift-field">' +
+                          '<label>Пробег за смену (км)</label>' +
+                          '<input type="number" step="5" min="10" class="input-field num" style="width:100%;" data-shift-input="mileageKm" data-month-id="' + esc(m.id) + '" value="' + mileageKm + '" />' +
+                        '</div>' +
+                        '<div class="shift-field">' +
+                          '<label>Расход в городе (л/100км)</label>' +
+                          '<input type="number" step="0.5" min="6" class="input-field num" style="width:100%;" data-shift-input="consumptionL" data-month-id="' + esc(m.id) + '" value="' + consumptionL + '" />' +
+                        '</div>' +
+                        '<div class="shift-field">' +
+                          '<label>Цена бензина АИ-92/95 (₸/л)</label>' +
+                          '<input type="number" step="1" min="100" class="input-field num" style="width:100%;" data-shift-input="fuelPriceTenge" data-month-id="' + esc(m.id) + '" value="' + fuelPriceTenge + '" />' +
+                        '</div>' +
+                      '</div>' +
+                      '<div style="display:flex;justify-content:flex-end;">' +
+                        '<button type="button" class="btn-sm btn-primary" data-action="apply-calculated-fuel" data-month-id="' + esc(m.id) + '">' +
+                          '✓ Применить ' + formatTenge(autoCalcFuel, false) + ' в расход топлива' +
+                        '</button>' +
+                      '</div>' +
+                    '</div>'
+                  ) : '') +
+
+                  '<div class="shift-calc-grid">' +
+                    '<div class="shift-field">' +
+                      '<label>Касса за смену (грязными)</label>' +
+                      '<input type="number" step="500" min="0" class="input-field num" style="width:100%;" data-shift-input="grossShift" data-month-id="' + esc(m.id) + '" value="' + grossShift + '" />' +
+                      '<span class="field-hint">Общая выручка со смены</span>' +
+                    '</div>' +
+                    '<div class="shift-field">' +
+                      '<label>Расход топлива (бензин)</label>' +
+                      '<input type="number" step="200" min="0" class="input-field num val-neg" style="width:100%;" data-shift-input="fuelShift" data-month-id="' + esc(m.id) + '" value="' + fuelShift + '" />' +
+                      '<span class="field-hint">Бензин Haval M6 АКПП</span>' +
+                    '</div>' +
+                    '<div class="shift-field">' +
+                      '<label>ЧИСТЫМИ с 1 смены</label>' +
+                      '<div class="input-field num val-pos shift-net-badge">' +
+                        '+' + formatTenge(netShift, false) +
+                      '</div>' +
+                      '<span class="field-hint">Касса минус бензин</span>' +
+                    '</div>' +
+                    '<div class="shift-field">' +
+                      '<label>Отработано смен</label>' +
+                      '<div class="shift-stepper">' +
+                        '<button type="button" class="btn-sm" data-shift-minus="1" data-month-id="' + esc(m.id) + '" title="Убавить смену">−1</button>' +
+                        '<input type="number" step="1" min="0" class="input-field num" data-shift-input="completedShifts" data-month-id="' + esc(m.id) + '" value="' + completedShifts + '" />' +
+                        '<button type="button" class="btn-sm" data-shift-plus="1" data-month-id="' + esc(m.id) + '" title="Добавить 1 смену">+1</button>' +
+                      '</div>' +
+                      '<span class="field-hint">Факт смен в ' + esc(m.shortLabel) + '</span>' +
+                    '</div>' +
+                  '</div>' +
+
+                  '<div class="shift-metrics-strip num">' +
+                    '<div class="shift-metric-col">' +
+                      '<span class="sm-label">Чистыми на руках:</span>' +
+                      '<span class="sm-val val-pos">' + formatTenge(earnedNetFromShifts, true) + '</span>' +
+                    '</div>' +
+                    '<div class="shift-metric-col">' +
+                      '<span class="sm-label">Сожжено на бензин:</span>' +
+                      '<span class="sm-val val-neg">−' + formatTenge(totalFuelSpent, false) + '</span>' +
+                    '</div>' +
+                    '<div class="shift-metric-col">' +
+                      '<span class="sm-label">Грязная касса всего:</span>' +
+                      '<span class="sm-val">' + formatTenge(totalGrossEarned, false) + '</span>' +
+                    '</div>' +
+                  '</div>' +
+
+                  '<div class="shift-result-banner">' +
+                    '<div>' +
+                      '<span>Осталось чистыми по плану: <strong class="num">' + formatTenge(remainingToEarn, false) + '</strong></span>' +
+                    '</div>' +
+                    '<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">' +
+                      '<span style="color:var(--cyan);font-weight:700;" class="num">' +
+                        (remainingShifts > 0 ? '≈ ещё ' + remainingShifts + ' смен(ы)' : '🎉 План по чистым сменам выполнен!') +
+                      '</span>' +
+                      (totalFuelSpent > 0 ? (
+                        '<button type="button" class="btn-sm" data-action="log-fuel-expense" data-month-id="' + esc(m.id) + '" title="Внести сумму за бензин (' + formatTenge(totalFuelSpent, false) + ') в список расходов месяца">' +
+                          '⛽ Бензин в расходы' +
+                        '</button>'
+                      ) : '') +
+                    '</div>' +
+                  '</div>' +
+                '</section>' +
+              '</div>' +
+
+              '<!-- Right Column: Tasks & Notes -->' +
+              '<div style="display:flex;flex-direction:column;gap:18px;">' +
+                '<section class="workspace-card glass-panel">' +
+                  '<div class="card-heading-row">' +
+                    '<h3 class="card-heading">✅ Задачи месяца (' + doneTasks + '/' + totalTasks + ')</h3>' +
+                    '<div class="filter-pills">' +
+                      '<button type="button" class="filter-pill ' + (activeTaskFilter === 'all' ? 'active' : '') + '" data-task-filter="all">Все</button>' +
+                      '<button type="button" class="filter-pill ' + (activeTaskFilter === 'todo' ? 'active' : '') + '" data-task-filter="todo">В работе</button>' +
+                      '<button type="button" class="filter-pill ' + (activeTaskFilter === 'done' ? 'active' : '') + '" data-task-filter="done">Готово</button>' +
+                      (issueTasks > 0 || activeTaskFilter === 'issue' ? '<button type="button" class="filter-pill ' + (activeTaskFilter === 'issue' ? 'active' : '') + '" data-task-filter="issue">⚠️ Перенос (' + issueTasks + ')</button>' : '') +
+                    '</div>' +
+                  '</div>' +
+
+                  '<div class="tasks-list">' + tasksListHtml + '</div>' +
+
+                  '<form style="display:flex;gap:8px;margin-top:4px;" data-form="add-task" data-month-id="' + esc(m.id) + '">' +
+                    '<input type="text" class="input-field" name="taskText" placeholder="Добавить новую задачу в ' + esc(m.title.toLowerCase()) + '..." style="flex:1;" autocomplete="off" />' +
+                    '<button type="submit" class="btn-primary">+ Задача</button>' +
+                  '</form>' +
+                '</section>' +
+
+                '<section class="workspace-card glass-panel">' +
+                  '<div class="card-heading-row">' +
+                    '<h3 class="card-heading">📝 Заметки и фактические цифры (' + esc(m.title) + ')</h3>' +
+                  '</div>' +
+                  '<textarea class="notes-textarea" data-notes-month="' + esc(m.id) + '" placeholder="Записывайте сюда фактический пробег Haval M6 АКПП, расход бензина, чеки с АЗС, даты сдачи РК/экзаменов в КазУТБ, ссылки на комплектующие для LLM ПК или Elves Falath EXP..."></textarea>' +
+                '</section>' +
+              '</div>' +
+            '</div>' +
+          '</div>'
+        );
+      }
+
+      function renderAll() {
+        renderKPIs();
+        renderDock();
+        renderStage();
+        updateStorageBadge();
+      }
+
+      /* ---------------- KPI SYNC & INLINE EDITING ---------------- */
+      function syncTaskKpiTransition(task, prevStatus, nextStatus) {
+        if (!task.kpiLink) return;
+        const kpi = state.kpis.find(function (k) { return k.id === task.kpiLink.id; });
+        if (!kpi) return;
+
+        if (prevStatus !== 'done' && nextStatus === 'done') {
+          const room = Math.max(0, kpi.target - kpi.current);
+          const applied = Math.min(room, task.kpiLink.delta);
+          kpi.current += applied;
+          task.appliedAmount = applied;
+          if (applied > 0) {
+            showToast('Фонд «' + kpi.title + '» пополнен на +' + formatTenge(applied, false));
+          }
+        } else if (prevStatus === 'done' && nextStatus !== 'done') {
+          const revert = task.appliedAmount > 0 ? task.appliedAmount : task.kpiLink.delta;
+          kpi.current = Math.max(0, kpi.current - revert);
+          task.appliedAmount = 0;
+        }
+      }
+
+      function openInlineNumberEditor(targetEl, initialValue, onCommit) {
+        if (targetEl.querySelector('input')) return;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.inputMode = 'numeric';
+        input.className = 'inline-editor num';
+        input.value = String(initialValue);
+
+        const originalHtml = targetEl.innerHTML;
+        targetEl.innerHTML = '';
+        targetEl.appendChild(input);
+        input.focus();
+        input.select();
+
+        let done = false;
+        function finish(commit) {
+          if (done) return;
+          done = true;
+          if (commit) {
+            const parsed = parseNumericInput(input.value);
+            if (parsed !== null) {
+              onCommit(parsed);
+              return;
+            } else {
+              showToast('Введите число или формулу (напр. 250000+50000)', true);
+            }
+          }
+          targetEl.innerHTML = originalHtml;
+        }
+
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            finish(true);
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            finish(false);
+          }
+        });
+        input.addEventListener('blur', function () {
+          finish(true);
+        });
+      }
+
+      function openInlineTextEditor(targetEl, initialText, onCommit) {
+        if (targetEl.querySelector('input')) return;
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.className = 'inline-editor wide';
+        input.value = initialText;
+
+        const originalText = targetEl.textContent;
+        targetEl.textContent = '';
+        targetEl.appendChild(input);
+        input.focus();
+        input.select();
+
+        let done = false;
+        function finish(commit) {
+          if (done) return;
+          done = true;
+          const trimmed = input.value.trim();
+          if (commit && trimmed.length > 0) {
+            onCommit(trimmed);
+          } else {
+            targetEl.textContent = originalText;
+          }
+        }
+
+        input.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            finish(true);
+          } else if (e.key === 'Escape') {
+            e.preventDefault();
+            finish(false);
+          }
+        });
+        input.addEventListener('blur', function () {
+          finish(true);
+        });
+      }
+
+      /* ---------------- EVENT LISTENERS ---------------- */
+
+      // KPI Grid Clicks (Inline Edit & Quick +10k/+50k buttons)
+      document.getElementById('kpiGrid').addEventListener('click', function (e) {
+        const bumpBtn = e.target.closest('[data-kpi-bump]');
+        if (bumpBtn) {
+          const kpiId = bumpBtn.getAttribute('data-kpi-id');
+          const delta = Number(bumpBtn.getAttribute('data-kpi-bump')) || 0;
+          const kpi = state.kpis.find(function (k) { return k.id === kpiId; });
+          if (!kpi) return;
+          kpi.current = Math.max(0, kpi.current + delta);
+          saveState();
+          renderKPIs();
+          if (activeTab === 'overview') renderStage();
+          return;
+        }
+
+        const editEl = e.target.closest('[data-edit-kpi]');
+        if (editEl) {
+          const field = editEl.getAttribute('data-edit-kpi');
+          const kpiId = editEl.getAttribute('data-kpi-id');
+          const kpi = state.kpis.find(function (k) { return k.id === kpiId; });
+          if (!kpi) return;
+
+          openInlineNumberEditor(editEl, kpi[field], function (val) {
+            kpi[field] = Math.max(0, val);
+            saveState();
+            renderKPIs();
+            if (activeTab === 'overview') renderStage();
+          });
+        }
+      });
+
+      // Liquid Dock Tab Clicks
+      document.getElementById('liquidDock').addEventListener('click', function (e) {
+        const tabBtn = e.target.closest('[data-tab]');
+        if (!tabBtn) return;
+        switchTab(tabBtn.getAttribute('data-tab'));
+      });
+
+      // Stage Delegated Clicks
+      const stageEl = document.getElementById('stageContainer');
+
+      stageEl.addEventListener('click', function (e) {
+        // Navigate to month from Overview cards/chart
+        const gotoEl = e.target.closest('[data-goto-month]');
+        if (gotoEl) {
+          switchTab(gotoEl.getAttribute('data-goto-month'));
+          window.scrollTo({ top: 180, behavior: 'smooth' });
+          return;
+        }
+
+        // Filter tasks
+        const filterBtn = e.target.closest('[data-task-filter]');
+        if (filterBtn) {
+          activeTaskFilter = filterBtn.getAttribute('data-task-filter');
+          renderStage();
+          return;
+        }
+
+        // Toggle draft finance type (+ Приход / - Расход)
+        const setTypeBtn = e.target.closest('[data-set-fintype]');
+        if (setTypeBtn) {
+          newFinDraftType = setTypeBtn.getAttribute('data-set-fintype');
+          renderStage();
+          return;
+        }
+
+        // Quick sum chips inside Add Finance form
+        const quickSumBtn = e.target.closest('[data-quick-fin-sum]');
+        if (quickSumBtn) {
+          const amountInput = document.getElementById('draftFinAmountInput');
+          if (!amountInput) return;
+          const rawVal = quickSumBtn.getAttribute('data-quick-fin-sum');
+          if (rawVal === 'clear') {
+            amountInput.value = '';
+          } else {
+            const current = parseNumericInput(amountInput.value) || 0;
+            const added = current + (Number(rawVal) || 0);
+            amountInput.value = String(added);
+          }
+          amountInput.focus();
+          return;
+        }
+
+        // Shift +1 button
+        const shiftPlusBtn = e.target.closest('[data-shift-plus]');
+        if (shiftPlusBtn) {
+          const monthId = shiftPlusBtn.getAttribute('data-month-id');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+          month.shiftCalc.completedShifts = (month.shiftCalc.completedShifts || 0) + 1;
+          saveState();
+          renderStage();
+          showToast('Отработана +1 смена (' + month.shiftCalc.completedShifts + ' всего)');
+          return;
+        }
+
+        // Shift -1 button
+        const shiftMinusBtn = e.target.closest('[data-shift-minus]');
+        if (shiftMinusBtn) {
+          const monthId = shiftMinusBtn.getAttribute('data-month-id');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+          month.shiftCalc.completedShifts = Math.max(0, (month.shiftCalc.completedShifts || 0) - 1);
+          saveState();
+          renderStage();
+          showToast('Смена убавлена (' + month.shiftCalc.completedShifts + ' всего)');
+          return;
+        }
+
+        // Toggle Km Details
+        const toggleKmBtn = e.target.closest('[data-action="toggle-km-details"]');
+        if (toggleKmBtn) {
+          const monthId = toggleKmBtn.getAttribute('data-month-id');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+          month.shiftCalc.showKmDetails = !month.shiftCalc.showKmDetails;
+          saveState();
+          renderStage();
+          return;
+        }
+
+        // Apply calculated fuel to shift
+        const applyFuelBtn = e.target.closest('[data-action="apply-calculated-fuel"]');
+        if (applyFuelBtn) {
+          const monthId = applyFuelBtn.getAttribute('data-month-id');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+          const mileage = month.shiftCalc.mileageKm || 120;
+          const cons = month.shiftCalc.consumptionL || 12.5;
+          const price = month.shiftCalc.fuelPriceTenge || 225;
+          const computed = Math.round(mileage * (cons / 100) * price);
+          month.shiftCalc.fuelShift = computed;
+          saveState();
+          renderStage();
+          showToast('Расход топлива обновлен: ' + formatTenge(computed, false) + '/смена');
+          return;
+        }
+
+        // Log fuel expense directly into month finances
+        const logFuelBtn = e.target.closest('[data-action="log-fuel-expense"]');
+        if (logFuelBtn) {
+          const monthId = logFuelBtn.getAttribute('data-month-id');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+          const completed = month.shiftCalc.completedShifts || 0;
+          const fuelPerShift = month.shiftCalc.fuelShift || 0;
+          const totalFuel = completed * fuelPerShift;
+          if (totalFuel <= 0) {
+            showToast('Укажите отработанные смены для фиксации бензина', true);
+            return;
+          }
+          const existing = month.finances.find(function (f) {
+            return f.type === 'expense' && /Бензин Haval|Топливо Haval/i.test(f.label);
+          });
+          const label = 'Бензин Haval M6 АКПП (' + completed + ' смен)';
+          if (existing) {
+            existing.amount = totalFuel;
+            existing.label = label;
+          } else {
+            month.finances.push({
+              id: uid('fin'),
+              label: label,
+              type: 'expense',
+              amount: totalFuel
+            });
+          }
+          saveState();
+          renderStage();
+          showToast('Бензин (' + formatTenge(totalFuel, false) + ') добавлен в расходы месяца');
+          return;
+        }
+
+        // Month Actions (Tasks & Finances)
+        const actionEl = e.target.closest('[data-action]');
+        if (!actionEl) return;
+
+        const action = actionEl.getAttribute('data-action');
+        const monthId = actionEl.getAttribute('data-month-id');
+        const month = state.months.find(function (m) { return m.id === monthId; });
+        if (!month) return;
+
+        if (action === 'toggle-task-done') {
+          const taskId = actionEl.getAttribute('data-task-id');
+          const task = month.tasks.find(function (t) { return t.id === taskId; });
+          if (!task) return;
+          const prev = task.status;
+          const next = prev === 'done' ? 'todo' : 'done';
+          task.status = next;
+          syncTaskKpiTransition(task, prev, next);
+          saveState();
+          renderAll();
+        } else if (action === 'toggle-task-issue') {
+          const taskId = actionEl.getAttribute('data-task-id');
+          const task = month.tasks.find(function (t) { return t.id === taskId; });
+          if (!task) return;
+          const prev = task.status;
+          const next = prev === 'issue' ? 'todo' : 'issue';
+          task.status = next;
+          syncTaskKpiTransition(task, prev, next);
+          saveState();
+          renderAll();
+        } else if (action === 'edit-task-text') {
+          const taskId = actionEl.getAttribute('data-task-id');
+          const task = month.tasks.find(function (t) { return t.id === taskId; });
+          if (!task) return;
+          openInlineTextEditor(actionEl, task.text, function (newText) {
+            task.text = newText;
+            saveState();
+            renderStage();
+          });
+        } else if (action === 'delete-task') {
+          const taskId = actionEl.getAttribute('data-task-id');
+          const idx = month.tasks.findIndex(function (t) { return t.id === taskId; });
+          if (idx === -1) return;
+          const removed = month.tasks[idx];
+          if (removed.status === 'done') {
+            syncTaskKpiTransition(removed, 'done', 'todo');
+          }
+          month.tasks.splice(idx, 1);
+          saveState();
+          renderAll();
+        } else if (action === 'toggle-fin-type') {
+          const finId = actionEl.getAttribute('data-fin-id');
+          const fin = month.finances.find(function (f) { return f.id === finId; });
+          if (!fin) return;
+          fin.type = fin.type === 'income' ? 'expense' : 'income';
+          saveState();
+          renderStage();
+        } else if (action === 'edit-fin-amount') {
+          const finId = actionEl.getAttribute('data-fin-id');
+          const fin = month.finances.find(function (f) { return f.id === finId; });
+          if (!fin) return;
+          openInlineNumberEditor(actionEl, fin.amount, function (val) {
+            if (val < 0) {
+              fin.type = 'expense';
+              fin.amount = Math.abs(val);
+            } else {
+              fin.amount = val;
+            }
+            saveState();
+            renderStage();
+          });
+        } else if (action === 'edit-fin-label') {
+          const finId = actionEl.getAttribute('data-fin-id');
+          const fin = month.finances.find(function (f) { return f.id === finId; });
+          if (!fin) return;
+          openInlineTextEditor(actionEl, fin.label, function (newLabel) {
+            fin.label = newLabel;
+            saveState();
+            renderStage();
+          });
+        } else if (action === 'delete-fin') {
+          const finId = actionEl.getAttribute('data-fin-id');
+          month.finances = month.finances.filter(function (f) { return f.id !== finId; });
+          saveState();
+          renderStage();
+        }
+      });
+
+      // Forms Submit (Add Finance & Add Task)
+      stageEl.addEventListener('submit', function (e) {
+        const finForm = e.target.closest('[data-form="add-fin"]');
+        if (finForm) {
+          e.preventDefault();
+          const monthId = finForm.getAttribute('data-month-id');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+
+          const label = finForm.elements.finLabel.value.trim();
+          const parsedAmount = parseNumericInput(finForm.elements.finAmount.value);
+          if (!label || parsedAmount === null) {
+            showToast('Укажите название и корректную сумму', true);
+            return;
+          }
+
+          month.finances.push({
+            id: uid('fin'),
+            label: label,
+            type: newFinDraftType,
+            amount: Math.abs(parsedAmount)
+          });
+
+          saveState();
+          renderStage();
+          showToast('Статья добавлена в ' + month.title);
+          return;
+        }
+
+        const taskForm = e.target.closest('[data-form="add-task"]');
+        if (taskForm) {
+          e.preventDefault();
+          const monthId = taskForm.getAttribute('data-month-id');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+
+          const text = taskForm.elements.taskText.value.trim();
+          if (!text) return;
+
+          month.tasks.push({
+            id: uid('task'),
+            text: text,
+            status: 'todo'
+          });
+          activeTaskFilter = 'all';
+          saveState();
+          renderAll();
+          showToast('Задача добавлена');
+        }
+      });
+
+      // Inputs inside Stage (Notes & Shift Calculator)
+      stageEl.addEventListener('input', function (e) {
+        const notesArea = e.target.closest('textarea[data-notes-month]');
+        if (notesArea) {
+          const monthId = notesArea.getAttribute('data-notes-month');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (month) {
+            month.notes = notesArea.value;
+            saveState();
+          }
+          return;
+        }
+
+        const shiftInput = e.target.closest('[data-shift-input]');
+        if (shiftInput) {
+          const monthId = shiftInput.getAttribute('data-month-id');
+          const field = shiftInput.getAttribute('data-shift-input');
+          const month = state.months.find(function (m) { return m.id === monthId; });
+          if (!month) return;
+          const val = Math.max(0, Number(shiftInput.value) || 0);
+          month.shiftCalc[field] = val;
+          saveState();
+
+          const box = shiftInput.closest('.shift-calc-box');
+          if (box) {
+            const grossEl = box.querySelector('[data-shift-input="grossShift"]');
+            const fuelEl = box.querySelector('[data-shift-input="fuelShift"]');
+            const gross = Math.max(0, Number(grossEl ? grossEl.value : month.shiftCalc.grossShift) || 0);
+            const fuel = Math.max(0, Number(fuelEl ? fuelEl.value : month.shiftCalc.fuelShift) || 0);
+            const net = Math.max(0, gross - fuel);
+            const netBadge = box.querySelector('.shift-net-badge');
+            if (netBadge) netBadge.textContent = '+' + formatTenge(net, false);
+
+            const kmEl = box.querySelector('[data-shift-input="mileageKm"]');
+            const consEl = box.querySelector('[data-shift-input="consumptionL"]');
+            const priceEl = box.querySelector('[data-shift-input="fuelPriceTenge"]');
+            if (kmEl && consEl && priceEl) {
+              const km = Math.max(0, Number(kmEl.value) || 0);
+              const cons = Math.max(0, Number(consEl.value) || 0);
+              const price = Math.max(0, Number(priceEl.value) || 0);
+              const autoCalc = Math.round(km * (cons / 100) * price);
+              const autoCalcEl = box.querySelector('.val-warn');
+              if (autoCalcEl) autoCalcEl.textContent = formatTenge(autoCalc, false);
+            }
+          }
+        }
+      });
+
+      stageEl.addEventListener('change', function (e) {
+        if (e.target.closest('[data-shift-input]')) {
+          renderStage();
+        }
+      });
+
+      // Export / Import / Reset
+      document.getElementById('exportJsonBtn').addEventListener('click', function () {
+        const payload = JSON.stringify(state, null, 2);
+        const blob = new Blob([payload], { type: 'application/json;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const dateTag = new Date().toISOString().slice(0, 10);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'astana-finops-backup-' + dateTag + '.json';
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        URL.revokeObjectURL(url);
+        showToast('Резервная копия JSON сохранена');
+      });
+
+      const importInput = document.getElementById('importFileInput');
+      document.getElementById('importJsonBtn').addEventListener('click', function () {
+        importInput.value = '';
+        importInput.click();
+      });
+
+      importInput.addEventListener('change', function (e) {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function (ev) {
+          try {
+            const parsed = JSON.parse(String(ev.target.result));
+            if (!parsed || !Array.isArray(parsed.kpis) || !Array.isArray(parsed.months)) {
+              throw new Error('Invalid JSON');
+            }
+            state = normalizeState(parsed);
+            saveState();
+            renderAll();
+            showToast('Данные успешно восстановлены');
+          } catch (err) {
+            showToast('Ошибка: некорректный файл JSON', true);
+          }
+        };
+        reader.readAsText(file, 'utf-8');
+      });
+
+      const resetDialog = document.getElementById('resetDialog');
+      document.getElementById('resetStateBtn').addEventListener('click', function () {
+        if (typeof resetDialog.showModal === 'function') {
+          resetDialog.showModal();
+        } else if (confirm('Сбросить все данные к исходному плану?')) {
+          state = createDefaultState();
+          saveState();
+          renderAll();
+        }
+      });
+
+      document.getElementById('cancelResetBtn').addEventListener('click', function () {
+        resetDialog.close();
+      });
+
+      document.getElementById('confirmResetBtn').addEventListener('click', function () {
+        state = createDefaultState();
+        saveState();
+        renderAll();
+        resetDialog.close();
+        showToast('План сброшен к базовым значениям');
+      });
+
+      // Initialize
+      renderAll();
+
+      // Register Service Worker for offline PWA mobile support
+      if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+        window.addEventListener('load', function () {
+          navigator.serviceWorker.register('./sw.js').catch(function () {});
+        });
+      }
+    })();
+  </script>
+</body>
+</html>
